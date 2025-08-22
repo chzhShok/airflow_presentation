@@ -58,7 +58,9 @@ x-airflow-common:
     AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
     AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
     AIRFLOW__CELERY__BROKER_URL: redis://:@redis:6379/0
-    AIRFLOW__CORE__FERNET_KEY: 'PHBvAkRvIio06ldDQG2X5-sCsEaN6u9CA4Zm3ZbfWQ0='
+    # git 
+    AIRFLOW__CORE__FERNET_KEY: ${GITHUB_FERNET_KEY_AIRFLOW}
+    # git 
     AIRFLOW__CORE__DAGS_ARE_PAUSED_AT_CREATION: 'true'
     AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
     AIRFLOW__WEBSERVER__COOKIES_SAMESITE: 'Lax'
