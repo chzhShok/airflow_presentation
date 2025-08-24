@@ -14,7 +14,7 @@ def final_processing():
 
 with DAG(
     dag_id="dynamic_dag",
-    tags=["presentation"],
+    tags=["dynamic_dag"],
 ) as dag:
 
     start = EmptyOperator(task_id="start")

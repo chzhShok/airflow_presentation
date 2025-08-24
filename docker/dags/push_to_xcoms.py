@@ -8,7 +8,7 @@ def push_to_xcoms(**context):
 with DAG(
     dag_id='push_to_xcoms_example',
     catchup=False,
-    tags=['presentation']
+    tags=['xcoms']
 ) as dag:
 
     push_task = PythonOperator(

@@ -4,7 +4,7 @@ from datetime import datetime
 
 with DAG(
     dag_id="union_chains",
-    tags=['presentation']
+    tags=['dependence']
 ) as dag:
 
     task1 = BashOperator(task_id="task1", bash_command="sleep 10 && echo 'task1'")

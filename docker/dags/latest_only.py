@@ -10,7 +10,7 @@ with DAG(
     dag_id="latest_only",
     schedule="@daily",
     start_date=datetime.datetime(2025, 7, 1),
-    tags=["presentation"],
+    tags=["latest_only"],
     catchup=True,
 ) as dag:
     latest_only = LatestOnlyOperator(task_id="latest_only", depends_on_past=True)

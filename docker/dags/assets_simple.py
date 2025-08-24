@@ -1,12 +1,18 @@
 from airflow.sdk import asset
 
 
-@asset(schedule="@daily")
+@asset(
+    schedule="@daily",
+    tags=["assets"],
+    )
 def extracted_data():
     return {"a": 1, "b": 2}
 
 
-@asset(schedule=extracted_data)
+@asset(
+    schedule=extracted_data,
+    tags=["assets"],
+    )
 def transformed_data(context):
     data = context["ti"].xcom_pull(
         dag_id="extracted_data",
@@ -18,7 +24,10 @@ def transformed_data(context):
     return {k: v * 2 for k, v in data.items()}
 
 
-@asset(schedule=transformed_data)
+@asset(
+    schedule=transformed_data,
+    tags=["assets"],
+    )
 def loaded_data(context):
     data = context["task_instance"].xcom_pull(
         dag_id="transformed_data",

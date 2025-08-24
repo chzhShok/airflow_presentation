@@ -1,15 +1,21 @@
 from airflow.sdk import asset
 import random
 
-@asset(schedule="@daily")
+@asset(
+    schedule="@daily",
+    tags=["assets", "branching"],
+    )
 def task1():
     return {
-        "name": "Pupkin Zalupkin",
+        "name": "Dexter Morgan",
         "score": random.randint(0, 100),
         "update_date": "2025-05-01"
     }
 
-@asset(schedule=task1)
+@asset(
+    schedule=task1,
+    tags=["assets", "branching"],
+    )
 def task2(context):
     task1_data = context["ti"].xcom_pull(
         dag_id="task1",
@@ -23,7 +29,10 @@ def task2(context):
 
     return "pass" if score >= 80 else "fail"
 
-@asset(schedule=task2)
+@asset(
+    schedule=task2,
+    tags=["assets", "branching"],
+    )
 def task3(context):
     result = context["ti"].xcom_pull(
         dag_id="task2",
@@ -37,7 +46,10 @@ def task3(context):
     else:
         print("Skipped (task3)")
 
-@asset(schedule=task2)
+@asset(
+    schedule=task2,
+    tags=["assets", "branching"],
+    )
 def task4(context):
     result = context["ti"].xcom_pull(
         dag_id="task2",

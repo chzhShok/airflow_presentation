@@ -6,7 +6,7 @@ from datetime import datetime
     schedule="@daily",
     start_date=datetime(2025, 7, 1),
     catchup=True,
-    tags=["presentation"],
+    tags=["daily"],
 )
 def daily_example_dag():
     @task

@@ -20,7 +20,7 @@ def final_report():
 
 with DAG(
     dag_id="easy_branching",
-    tags=['presentation']
+    tags=['branching']
 ) as dag:
     
     branch_task = BranchPythonOperator(

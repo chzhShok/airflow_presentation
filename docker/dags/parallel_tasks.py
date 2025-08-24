@@ -4,7 +4,7 @@ from datetime import datetime
 
 with DAG(
     dag_id="parallel_tasks",
-    tags=['presentation']
+    tags=['dependence']
 ) as dag:
 
     task_a = EmptyOperator(task_id="task_a")
