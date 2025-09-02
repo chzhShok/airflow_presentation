@@ -1,40 +1,36 @@
-from airflow.sdk import asset
+from airflow.sdk import asset, Asset
 
 
-@asset(
-    schedule="@daily",
-    tags=["assets"],
-    )
-def extracted_data():
+@asset(schedule="@daily", tags=["assets"])
+def extracted_data(context):
     return {"a": 1, "b": 2}
 
 
-@asset(
-    schedule=extracted_data,
-    tags=["assets"],
-    )
-def transformed_data(context):
-    data = context["ti"].xcom_pull(
-        dag_id="extracted_data",
-        task_ids="extracted_data",
+@asset(schedule=Asset("extracted_data"), tags=["assets"])
+def transformed_data(context, extracted_data):
+    ti = context["ti"]
+    event = context["inlet_events"][extracted_data][-1]
+
+    data = ti.xcom_pull(
+        dag_id=event.source_dag_id,
+        task_ids=event.source_task_id,
         key="return_value",
-        include_prior_dates=True,
+        run_id=event.source_run_id,
     )
 
     return {k: v * 2 for k, v in data.items()}
 
 
-@asset(
-    schedule=transformed_data,
-    tags=["assets"],
-    )
-def loaded_data(context):
-    data = context["task_instance"].xcom_pull(
-        dag_id="transformed_data",
-        task_ids="transformed_data",
+@asset(schedule=Asset("transformed_data"), tags=["assets"])
+def loaded_data(context, transformed_data):
+    ti = context["ti"]
+    event = context["inlet_events"][transformed_data][-1]
+
+    data = ti.xcom_pull(
+        dag_id=event.source_dag_id,
+        task_ids=event.source_task_id,
         key="return_value",
-        include_prior_dates=True,
+        run_id=event.source_run_id,
     )
-    summed_data = sum(data.values())
-    
-    print(f"Summed data: {summed_data}")
+
+    print(f"Summed data: {sum(data.values())}")

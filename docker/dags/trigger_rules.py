@@ -2,6 +2,7 @@ from airflow import DAG
 from airflow.operators.python import PythonOperator
 from airflow.utils.trigger_rule import TriggerRule
 from airflow.operators.empty import EmptyOperator
+from airflow.utils.task_group import TaskGroup
 
 def succeed():
     print("Task succeeded!")
@@ -31,16 +32,17 @@ with DAG(
     )
 
     # Tasks that runs if all upstream tasks succeed
-    run_all_success_start = PythonOperator(
-        task_id='run_all_success_start',
-        python_callable=succeed,
-        trigger_rule=TriggerRule.ALL_SUCCESS
-    )
+    with TaskGroup("all_success_triggers", tooltip="Tasks triggered by ALL_SUCCESS") as all_success_group:
+        run_all_success_start = PythonOperator(
+            task_id='run_all_success_start',
+            python_callable=succeed,
+            trigger_rule=TriggerRule.ALL_SUCCESS
+        )
 
-    run_all_success_fail = PythonOperator(
-        task_id='run_all_success_fail',
-        python_callable=succeed,
-        trigger_rule=TriggerRule.ALL_SUCCESS
+        run_all_success_fail = PythonOperator(
+            task_id='run_all_success_fail',
+            python_callable=succeed,
+            trigger_rule=TriggerRule.ALL_SUCCESS
     )
 
     # Task that runs if at least one upstream task succeeds
@@ -51,17 +53,18 @@ with DAG(
     )
 
     # Tasks that runs if all upstream tasks fail
-    run_all_failed_start = PythonOperator(
-        task_id='run_all_failed_start',
-        python_callable=succeed,
-        trigger_rule=TriggerRule.ALL_FAILED
-    )
+    with TaskGroup("all_failed_triggers", tooltip="Tasks triggered by ALL_FAILED") as all_failed_group:
+        run_all_failed_start = PythonOperator(
+            task_id='run_all_failed_start',
+            python_callable=succeed,
+            trigger_rule=TriggerRule.ALL_FAILED
+        )
 
-    run_all_failed_fail = PythonOperator(
-        task_id='run_all_failed_fail',
-        python_callable=succeed,
-        trigger_rule=TriggerRule.ALL_FAILED
-    )
+        run_all_failed_fail = PythonOperator(
+            task_id='run_all_failed_fail',
+            python_callable=succeed,
+            trigger_rule=TriggerRule.ALL_FAILED
+        )
 
     # Task that runs regardless of upstream task state
     run_always = PythonOperator(

@@ -133,7 +133,7 @@ services:
     restart: always
     depends_on:
       <<: *airflow-common-depends-on
-      airflow-init-connection:
+      airflow-init-extra-parameters:
         condition: service_completed_successfully
 
   airflow-scheduler:
@@ -148,7 +148,7 @@ services:
     restart: always
     depends_on:
       <<: *airflow-common-depends-on
-      airflow-init-connection:
+      airflow-init-extra-parameters:
         condition: service_completed_successfully
 
   airflow-dag-processor:
@@ -163,7 +163,7 @@ services:
     restart: always
     depends_on:
       <<: *airflow-common-depends-on
-      airflow-init-connection:
+      airflow-init-extra-parameters:
         condition: service_completed_successfully
 
   airflow-worker:
@@ -188,7 +188,7 @@ services:
       <<: *airflow-common-depends-on
       airflow-apiserver:
         condition: service_healthy
-      airflow-init-connection:
+      airflow-init-extra-parameters:
         condition: service_completed_successfully
 
   airflow-triggerer:
@@ -203,7 +203,7 @@ services:
     restart: always
     depends_on:
       <<: *airflow-common-depends-on
-      airflow-init-connection:
+      airflow-init-extra-parameters:
         condition: service_completed_successfully
 
   airflow-init:
@@ -269,11 +269,13 @@ services:
     user: "0:0"
 
   # create connections in Airflow using `init-connections.sh` script
-  airflow-init-connection:
+  airflow-init-extra-parameters:
     <<: *airflow-common
     volumes:
-      - ./init-connections.sh:/opt/airflow/init-connection.sh
-    entrypoint: /opt/airflow/init-connection.sh
+      - ./init-connections.sh:/opt/airflow/init-connections.sh
+      - ./init-pools.sh:/opt/airflow/init-pools.sh
+      - ./init-wrapper.sh:/opt/airflow/init-wrapper.sh
+    entrypoint: /opt/airflow/init-wrapper.sh
     depends_on:
       <<: *airflow-common-depends-on
       airflow-init:
@@ -313,7 +315,7 @@ services:
     restart: always
     depends_on:
       <<: *airflow-common-depends-on
-      airflow-init-connection:
+      airflow-init-extra-parameters:
         condition: service_completed_successfully
 
 volumes:
