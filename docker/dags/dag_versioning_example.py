@@ -7,27 +7,16 @@ from datetime import datetime
 def dag_versioning_example():
     
     @task
-    def task1():
-        print("task1 completed")
-    
-    @task
-    def task2():
-        print("task2 completed")
+    def task_a():
+        print("task_a completed")
 
     @task
-    def task3():
-        print("task3 completed")
-
-    @task
-    def task4():
-        print("task4 completed")
+    def task_b():
+        print("task_b completed")
     
-    task1 = task1()
-    task2 = task2()
-    task3 = task3()
-    task4 = task4()
+    task_a = task_a()
+    task_b = task_b()
     
-    task1 >> task2
-    task2 >> [task3, task4]
+    task_a >> task_b
 
 dag_versioning_example()

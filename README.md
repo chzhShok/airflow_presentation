@@ -4,7 +4,7 @@ Presentation, docker compose and DAG examples for Airflow
 # Presentation
 Located in `docs/`  
 Presentation `Airflow`: more basic information  
-Presentation `Airflow_performance_edition`: less basic information, more specific information
+Presentation `Airflow_short_version`: less basic information, more specific information
 
 # Start Airflow in Docker
 Airflow version: 3.0.3
@@ -45,4 +45,4 @@ docker-compose up -d
 This build features:
 1. Uses a remote Git repository and a local `dags` directory as DAG bundles. See `[dag_processor]` in `airflow.cfg`
 2. Creates a table `test_table` in the `postgres` container using the `init.sql` script at startup
-3. Includes the `airflow-init-connection` container, which creates connections in the Airflow metadata database at startup
+3. Includes the `airflow-init-extra-parameters` container, which creates connections and pools in the Airflow metadata database at startup

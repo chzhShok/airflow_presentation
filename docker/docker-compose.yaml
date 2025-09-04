@@ -272,9 +272,9 @@ services:
   airflow-init-extra-parameters:
     <<: *airflow-common
     volumes:
-      - ./init-connections.sh:/opt/airflow/init-connections.sh
-      - ./init-pools.sh:/opt/airflow/init-pools.sh
-      - ./init-wrapper.sh:/opt/airflow/init-wrapper.sh
+      - ./scripts/init-connections.sh:/opt/airflow/init-connections.sh
+      - ./scripts/init-pools.sh:/opt/airflow/init-pools.sh
+      - ./scripts/init-wrapper.sh:/opt/airflow/init-wrapper.sh
     entrypoint: /opt/airflow/init-wrapper.sh
     depends_on:
       <<: *airflow-common-depends-on
